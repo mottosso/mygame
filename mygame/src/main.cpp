@@ -60,12 +60,13 @@ public:
         }
     }
 
-    RawModel loadToVAO(vector<float> positions)
+    RawModel loadToVAO(vector<float> positions, vector<int> indices)
     {
         GLuint vaoId = createVAO();
+        bindIndicesBuffer(indices);
         storeDataInAttributeList(0, positions);
         unbindVAO();
-        return RawModel(vaoId, positions.size() / 3);
+        return RawModel(vaoId, indices.size());
     }
 
 private:
@@ -95,7 +96,10 @@ private:
         glGenBuffers(1, &vboId);
 
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
-        glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), &buffer[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER,
+                     buffer.size() * sizeof(float),
+                     &buffer[0],
+                     GL_STATIC_DRAW);
         glVertexAttribPointer(attributeNumber, 3, GL_FLOAT, false, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -110,6 +114,17 @@ private:
         glBindVertexArray(0);
     }
 
+    void bindIndicesBuffer(vector<int> buffer)
+    {
+        GLuint vboId;
+        glGenBuffers(1, &vboId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                     buffer.size() * sizeof(float),
+                     &buffer[0],
+                     GL_STATIC_DRAW);
+    }
+
 };
 
 class Renderer
@@ -120,7 +135,7 @@ public:
     */
     void prepare()
     {
-        glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+        glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
@@ -128,11 +143,11 @@ public:
     {
         glBindVertexArray(model.getVaoId());
         glEnableVertexAttribArray(0);
-        glDrawArrays(GL_TRIANGLES, 0, model.getVertexCount());
+        // glDrawArrays(GL_TRIANGLES, 0, model.getVertexCount());
+        glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);
     }
-
 };
 
 int main(void)
@@ -163,24 +178,25 @@ int main(void)
     Renderer renderer = Renderer();
 
     vector<float> vertices {
-        // Left bottom triangle
-        -0.5f,  0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-
-        // Right top triangle
-         0.5f, -0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f,
+        -0.5f,  0.5f,  0.0f,
+        -0.5f, -0.5f,  0.0f,
+         0.5f, -0.5f,  0.0f,
+         0.5f,  0.5f,  0.0f,
     };
 
-    RawModel model = loader.loadToVAO(vertices);
+    vector<int> indices {
+        0, 1, 3,
+        3, 1, 2
+    };
+
+    RawModel model = loader.loadToVAO(vertices, indices);
 
     // Rendering Loop
     while (glfwWindowShouldClose(mWindow) == false) {
         if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(mWindow, true);
 
+        renderer.prepare();
         renderer.render(model);
 
         glfwSwapBuffers(mWindow);
