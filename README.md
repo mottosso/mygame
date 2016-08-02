@@ -11,7 +11,7 @@ NOT USABLE. This is a learning exercise only.
 Repository contains and statically compiles all dependencies on any platform via CMake.
 
 ```cmd
-$ git clone https://github.com/mottosso/mygame.git
+$ git clone --recursive https://github.com/mottosso/mygame.git
 $ cd mygame
 $ mkdir build && cd build
 
