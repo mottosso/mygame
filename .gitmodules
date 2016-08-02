@@ -1,20 +1,20 @@
-[submodule "myglitter/vendor/assimp"]
-	path = myglitter/vendor/assimp
+[submodule "mygame/vendor/assimp"]
+	path = mygame/vendor/assimp
 	url = https://github.com/assimp/assimp.git
     branch = master
-[submodule "myglitter/vendor/glad"]
-	path = myglitter/vendor/glad
+[submodule "mygame/vendor/glad"]
+	path = mygame/vendor/glad
 	url = https://github.com/Dav1dde/glad.git
     branch = c
-[submodule "myglitter/vendor/glfw"]
-	path = myglitter/vendor/glfw
+[submodule "mygame/vendor/glfw"]
+	path = mygame/vendor/glfw
 	url = https://github.com/glfw/glfw.git
     branch = master
-[submodule "myglitter/vendor/glm"]
-	path = myglitter/vendor/glm
+[submodule "mygame/vendor/glm"]
+	path = mygame/vendor/glm
 	url = https://github.com/g-truc/glm.git
     branch = master
-[submodule "myglitter/vendor/stb"]
-	path = myglitter/vendor/stb
+[submodule "mygame/vendor/stb"]
+	path = mygame/vendor/stb
 	url = https://github.com/nothings/stb.git
     branch = master
