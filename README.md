@@ -1,0 +1,2 @@
+# mygame
+An OpenGL game
