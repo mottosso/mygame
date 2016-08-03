@@ -22,3 +22,11 @@ $ cmake --build .
 :: Run game
 $ mygame/Debug/mygame
 ```
+
+<br>
+
+### Workflow
+
+Once project files has been generated, and once the project has been built, then what?
+
+1. The CMakeLists.txt includes a wildcard to capture all files in `/src` and `/include`. Re-running `cmake ..` would then cause any new files to be automatically added to compiler infrastructure you happen to be using, such as Visual Studio.
