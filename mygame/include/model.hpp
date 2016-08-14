@@ -3,7 +3,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
-
 #include <glad/glad.h>
 
 using namespace std;

@@ -1,7 +1,5 @@
 #include "shader.hpp"
 
-using namespace std;
-
 
 GLuint ShaderProgram::loadShader(string const & fname, int type)
 {
@@ -50,6 +48,7 @@ ShaderProgram::ShaderProgram(string const & vertexFname, string const & fragment
 
     glLinkProgram(mProgramId);
     glValidateProgram(mProgramId);
+    getAllUniformLocations();
 }
 
 
@@ -64,9 +63,9 @@ ShaderProgram::~ShaderProgram()
 }
 
 
-void ShaderProgram::bindAttribute(int attribute, string variableName)
+void ShaderProgram::bindAttribute(int attribute, const char * variableName)
 {
-    glBindAttribLocation(mProgramId, attribute, variableName.c_str());
+    glBindAttribLocation(mProgramId, attribute, variableName);
 }
 
 
@@ -74,4 +73,44 @@ void StaticShader::bindAttributes()
 {
     bindAttribute(0, "position");
     bindAttribute(1, "textureCoords");
+}
+
+    
+int ShaderProgram::getUniformLocation(const char * uniformName)
+{
+    return glGetUniformLocation(mProgramId, uniformName);
+}
+
+void ShaderProgram::getAllUniformLocations()
+{
+    mTransformationMatrixLocation = getUniformLocation("transformationMatrix");
+}
+
+
+void ShaderProgram::loadFloat(GLuint location, float value)
+{
+    glUniform1f(location, value);
+}
+
+
+void ShaderProgram::loadVector(GLuint location, vec3 value)
+{
+    glUniform3f(location, value.x, value.y, value.z);
+}
+
+
+void ShaderProgram::loadBoolean(GLuint location, bool value)
+{
+    glUniform1f(location, value ? 1 : 0);
+}
+
+
+void ShaderProgram::loadMatrix(GLuint location, mat4 value)
+{
+    glUniformMatrix4fv(location, 1, false, value_ptr(value));
+}
+
+void ShaderProgram::loadTransformationMatrix(mat4 matrix)
+{
+    loadMatrix(mTransformationMatrixLocation, matrix);
 }
