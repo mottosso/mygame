@@ -1,47 +1,46 @@
+// Copyright 2016 <konstruktion@gmail.com>
+
 #pragma once
 
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
-#include <glad/glad.h>
+#include <string>
 
-using namespace std;
+#include "glad/glad.h"
 
 /**
  * A raw model
  */
-class RawModel
-{
-public:
+class RawModel {
+ public:
     RawModel(int vaoId, int vertexCount)
-        : _vaoId(vaoId), _vertexCount(vertexCount) {};
+        : mVaoId(vaoId), mVertexCount(vertexCount) {}
 
-    int getVaoId(void) { return _vaoId; }
-    int getVertexCount(void) { return _vertexCount; }
+    int getVaoId(void) { return mVaoId; }
+    int getVertexCount(void) { return mVertexCount; }
 
-private:
-    int _vaoId;
-    int _vertexCount;
+ private:
+    int mVaoId;
+    int mVertexCount;
 };
 
 
 /**
  * A raw model
  */
-class Loader
-{
-public:
+class Loader {
+ public:
     ~Loader();
-    RawModel loadToVAO(vector<float> positions,
-                       vector<float> textureCoords,
-                       vector<int> indices);
-    GLuint loadTexture(string const & fname);
+    RawModel loadToVAO(std::vector<float> * positions,
+                       std::vector<float> * textureCoords,
+                       std::vector<int> * indices);
+    GLuint loadTexture(const char* fname);
 
-private:
-
-    vector<GLuint> vaos;
-    vector<GLuint> vbos;
-    vector<GLuint> textures;
+ private:
+    std::vector<GLuint> mVaos;
+    std::vector<GLuint> mVbos;
+    std::vector<GLuint> mTextures;
 
     GLuint mTexture;
 
@@ -50,39 +49,37 @@ private:
     /**
      * What does this do?
      */
-    void storeDataInAttributeList(int attributeNumber, int coordinateSize, vector<float> buffer);
+    void storeDataInAttributeList(int attributeNumber, int coordinateSize,
+                                  std::vector<float> * buffer);
 
     /**
      * Unbind the currently bound VAO
      */
     void unbindVAO() { glBindVertexArray(0); }
-    void bindIndicesBuffer(vector<int> buffer);
-
+    void bindIndicesBuffer(std::vector<int> * buffer);
 };
 
 
-class ModelTexture
-{
-public:
-    ModelTexture(GLuint id)
-        : _textureId(id) {};
+class ModelTexture {
+ public:
+    explicit ModelTexture(GLuint id)
+        : mTextureId(id) {}
 
-    GLuint getId() { return _textureId; }
+    GLuint getId() { return mTextureId; }
 
-private:
-    GLuint _textureId;
+ private:
+    GLuint mTextureId;
 };
 
-class TexturedModel
-{
-public:
-    TexturedModel(RawModel model, ModelTexture texture)
-        : _rawModel(model), _texture(texture) {};
+class TexturedModel {
+ public:
+    TexturedModel(RawModel * model, ModelTexture * texture)
+        : mRawModel(model), mTexture(texture) {}
 
-    RawModel getRawModel() { return _rawModel; }
-    ModelTexture getTexture() { return _texture; }
+    RawModel * getRawModel() { return mRawModel; }
+    ModelTexture * getTexture() { return mTexture; }
 
-private:
-    RawModel _rawModel;
-    ModelTexture _texture;
+ private:
+    RawModel * mRawModel;
+    ModelTexture * mTexture;
 };

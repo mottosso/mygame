@@ -1,19 +1,18 @@
+// Copyright 2016 <konstruktion@gmail.com>
+
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glad/glad.h>
-
-using namespace glm;
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glad/glad.h"
 
 
-class Maths
-{
-public:
-	mat4 createTransformationMatrix(vec3 translation,
-									float rx,
-									float ry,
-									float rz,
-									float sz);
-};
+namespace Maths {
+glm::mat4 createTransformationMatrix(glm::vec3 translation,
+                                     float rx,
+                                     float ry,
+                                     float rz,
+                                     float scale);
+
+}  // namespace Maths

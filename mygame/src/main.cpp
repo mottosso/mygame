@@ -1,3 +1,4 @@
+// Copyright 2016 <konstruktion@gmail.com>
 
 // System Headers
 #include <glad/glad.h>
@@ -13,12 +14,10 @@
 #include "shader.hpp"
 #include "model.hpp"
 #include "renderer.hpp"
+#include "entity.hpp"
 
-using namespace std;
 
-
-int main(void)
-{
+int main(void) {
     // Load GLFW and Create a Window
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -26,11 +25,11 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    auto mWindow = glfwCreateWindow(mWidth, mHeight, "OpenGL", nullptr, nullptr);
+    auto mWindow = glfwCreateWindow(mWidth, mHeight,
+                                    "OpenGL", nullptr, nullptr);
 
     // Check for Valid Context
-    if (mWindow == nullptr)
-    {
+    if (mWindow == nullptr) {
         fprintf(stderr, "Failed to Create OpenGL Context");
         return EXIT_FAILURE;
     }
@@ -41,21 +40,21 @@ int main(void)
 
     fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
 
-    vector<float> vertices {
+    std::vector<float> vertices {
         -0.5f,  0.5f,  0.0f,
         -0.5f, -0.5f,  0.0f,
          0.5f, -0.5f,  0.0f,
          0.5f,  0.5f,  0.0f,
     };
 
-    vector<float> textureCoords {
+    std::vector<float> textureCoords {
         0, 0,
         0, 1,
         1, 1,
         1, 0
     };
 
-    vector<int> indices {
+    std::vector<int> indices {
         0, 1, 3,
         3, 1, 2
     };
@@ -63,9 +62,15 @@ int main(void)
     Loader loader = Loader();
     Renderer renderer = Renderer();
     StaticShader shader = StaticShader();
-    RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
-    ModelTexture texture = ModelTexture(loader.loadTexture("../mygame/assets/texture.jpg"));
-    TexturedModel texturedModel = TexturedModel(model, texture);
+    RawModel model = loader.loadToVAO(&vertices, &textureCoords, &indices);
+    ModelTexture texture = ModelTexture(
+        loader.loadTexture("../mygame/assets/texture.jpg"));
+    TexturedModel texturedModel = TexturedModel(&model, &texture);
+
+    Entity entity = Entity(&texturedModel,
+                           glm::vec3(-1, 0, 0),  // Translate
+                           0, 0, 0,              // Rotation
+                           1);                   // Scale
 
     // Rendering Loop
     while (glfwWindowShouldClose(mWindow) == false) {
@@ -75,14 +80,13 @@ int main(void)
         renderer.prepare();
 
         shader.use();
-        renderer.render(texturedModel);
+        renderer.render(&entity, &shader);
         shader.forgo();
 
         glfwSwapBuffers(mWindow);
         glfwPollEvents();
     }
 
-    // loader.cleanup();
     glfwTerminate();
 
     return EXIT_SUCCESS;

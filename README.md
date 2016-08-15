@@ -1,5 +1,7 @@
 ### mygame
 
+![image](https://cloud.githubusercontent.com/assets/2152766/17715767/93d2abb8-63fd-11e6-8430-c797cf2b4cbc.png)
+
 An OpenGL game.
 
 NOT USABLE. This is a learning exercise only.

@@ -1,11 +1,11 @@
-// Preprocessor Directives
+// Copyright 2016 <konstruktion@gmail.com>
+
 #pragma once
 
-// System Headers
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "glad/glad.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 // Define Some Constants
 const int mWidth = 1280;
