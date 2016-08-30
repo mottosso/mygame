@@ -1,16 +1,20 @@
 // Copyright 2016 <konstruktion@gmail.com>
 
-// System Headers
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 // Standard Headers
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
 
+// System Headers
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
+#include "glm/gtx/string_cast.hpp"  // string_cast
+
+GLFWwindow* gWindow;
+
 // Local Headers
 #include "glitter.hpp"
+#include "camera.hpp"
 #include "shader.hpp"
 #include "model.hpp"
 #include "renderer.hpp"
@@ -25,17 +29,16 @@ int main(void) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    auto mWindow = glfwCreateWindow(mWidth, mHeight,
-                                    "OpenGL", nullptr, nullptr);
+    gWindow = glfwCreateWindow(mWidth, mHeight, "OpenGL", nullptr, nullptr);
 
     // Check for Valid Context
-    if (mWindow == nullptr) {
+    if (gWindow == nullptr) {
         fprintf(stderr, "Failed to Create OpenGL Context");
         return EXIT_FAILURE;
     }
 
     // Create Context and Load OpenGL Functions
-    glfwMakeContextCurrent(mWindow);
+    glfwMakeContextCurrent(gWindow);
     gladLoadGL();
 
     fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
@@ -60,30 +63,36 @@ int main(void) {
     };
 
     Loader loader = Loader();
-    Renderer renderer = Renderer();
     StaticShader shader = StaticShader();
+    Renderer renderer = Renderer(&shader);
+
     RawModel model = loader.loadToVAO(&vertices, &textureCoords, &indices);
     ModelTexture texture = ModelTexture(
         loader.loadTexture("../mygame/assets/texture.jpg"));
     TexturedModel texturedModel = TexturedModel(&model, &texture);
 
     Entity entity = Entity(&texturedModel,
-                           glm::vec3(-1, 0, 0),  // Translate
+                           glm::vec3(0, 0, -1),  // Translate
                            0, 0, 0,              // Rotation
                            1);                   // Scale
 
+    Camera camera = Camera();
+
     // Rendering Loop
-    while (glfwWindowShouldClose(mWindow) == false) {
-        if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(mWindow, true);
+    while (glfwWindowShouldClose(gWindow) == false) {
+        if (glfwGetKey(gWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(gWindow, true);
+
+        camera.move();
 
         renderer.prepare();
 
         shader.use();
+        shader.loadViewMatrix(camera.getViewMatrix());
         renderer.render(&entity, &shader);
         shader.forgo();
 
-        glfwSwapBuffers(mWindow);
+        glfwSwapBuffers(gWindow);
         glfwPollEvents();
     }
 

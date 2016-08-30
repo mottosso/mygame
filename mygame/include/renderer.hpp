@@ -6,11 +6,21 @@
 #include "entity.hpp"
 #include "shader.hpp"
 
+static float FOV = 70.0f;
+static float NEAR_PLANE = 0.1f;
+static float FAR_PLANE = 1000.0f;
+
 /**
  * Main game renderer
  */
 class Renderer {
  public:
+    /**
+     * This only ever needs to happen once
+    */
+    explicit Renderer(StaticShader* shader);
+
+    /**
     /**
      * Prepare OpenGL to render next frame
      */
@@ -21,5 +31,4 @@ class Renderer {
      * @param model a VAO with a VBO
      */
     void render(Entity * entity, StaticShader * shader);
-    // void render(TexturedModel * texturedModel);
 };

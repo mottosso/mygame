@@ -3,6 +3,14 @@
 #include "util.hpp"
 
 
+Renderer::Renderer(StaticShader* shader) {
+    glm::mat4 matrix { glm::perspective(FOV, 1.0f, NEAR_PLANE, FAR_PLANE) };
+    shader->use();
+    shader->loadProjectionMatrix(matrix);
+    shader->forgo();
+}
+
+
 void Renderer::prepare() {
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);

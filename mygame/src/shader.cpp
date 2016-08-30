@@ -78,6 +78,8 @@ int ShaderProgram::getUniformLocation(const char * uniformName) {
 
 void ShaderProgram::getAllUniformLocations() {
     mTransformationMatrixLocation = getUniformLocation("transformationMatrix");
+    mProjectionMatrixLocation = getUniformLocation("projectionMatrix");
+    mViewMatrixLocation = getUniformLocation("viewMatrix");
 }
 
 
@@ -103,4 +105,13 @@ void ShaderProgram::loadMatrix(GLuint location, glm::mat4 value) {
 
 void ShaderProgram::loadTransformationMatrix(glm::mat4 matrix) {
     loadMatrix(mTransformationMatrixLocation, matrix);
+}
+
+
+void ShaderProgram::loadProjectionMatrix(glm::mat4 matrix) {
+    loadMatrix(mProjectionMatrixLocation, matrix);
+}
+
+void ShaderProgram::loadViewMatrix(glm::mat4 matrix) {
+    loadMatrix(mViewMatrixLocation, matrix);
 }

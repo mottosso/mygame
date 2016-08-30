@@ -32,7 +32,7 @@ GLuint Loader::loadTexture(const char* fname) {
     }
 
     // Debug info
-    printf("size: %i\nw: %i\nh: %i\ncomp: %i",
+    printf("size: %i bytes\nw: %i px\nh: %i px\ncomp: %i channels\n",
            strlen((const char *) image), w, h, comp);
 
     glGenTextures(1, &mTexture);

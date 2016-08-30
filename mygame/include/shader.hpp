@@ -12,6 +12,10 @@
 #include "glm/gtc/type_ptr.hpp"  // value_ptr
 #include "glad/glad.h"
 
+// Local Headers
+#include "camera.hpp"
+#include "util.hpp"
+
 // TODO(marcus): Figure out how to control root directory
 static const char* VERTEX_FILE = "../mygame/assets/shader.vert";
 static const char* FRAGMENT_FILE = "../mygame/assets/shader.frag";
@@ -36,6 +40,8 @@ class ShaderProgram {
 
     int getUniformLocation(const char * uniformName);
     void loadTransformationMatrix(glm::mat4 matrix);
+    void loadProjectionMatrix(glm::mat4 matrix);
+    void loadViewMatrix(glm::mat4 matrix);
 
     virtual void getAllUniformLocations();
     virtual void bindAttributes() {}
@@ -53,6 +59,8 @@ class ShaderProgram {
     GLint mStatus;
     GLint mLength;
     GLuint mTransformationMatrixLocation;
+    GLuint mProjectionMatrixLocation;
+    GLuint mViewMatrixLocation;
 };
 
 
