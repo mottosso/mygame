@@ -43,23 +43,78 @@ int main(void) {
 
     fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
 
-    std::vector<float> vertices {
-        -0.5f,  0.5f,  0.0f,
-        -0.5f, -0.5f,  0.0f,
-         0.5f, -0.5f,  0.0f,
-         0.5f,  0.5f,  0.0f,
+    std::vector<float> vertices = {
+        -0.5f, 0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f, -0.5f,
+        0.5f, 0.5f, -0.5f,
+
+        -0.5f, 0.5f, 0.5f,
+        -0.5f, -0.5f, 0.5f,
+        0.5f, -0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f,
+
+        0.5f, 0.5f, -0.5f,
+        0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f,
+
+        -0.5f, 0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, 0.5f,
+        -0.5f, 0.5f, 0.5f,
+
+        -0.5f, 0.5f, 0.5f,
+        -0.5f, 0.5f, -0.5f,
+        0.5f, 0.5f, -0.5f,
+        0.5f, 0.5f, 0.5f,
+
+        -0.5f, -0.5f, 0.5f,
+        -0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f, 0.5f
     };
 
-    std::vector<float> textureCoords {
+    std::vector<float> textureCoords = {
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
         0, 0,
         0, 1,
         1, 1,
         1, 0
     };
 
-    std::vector<int> indices {
+    std::vector<int> indices = {
         0, 1, 3,
-        3, 1, 2
+        3, 1, 2,
+        4, 5, 7,
+        7, 5, 6,
+        8, 9, 11,
+        11, 9, 10,
+        12, 13, 15,
+        15, 13, 14,
+        16, 17, 19,
+        19, 17, 18,
+        20, 21, 23,
+        23, 21, 22
     };
 
     Loader loader = Loader();
@@ -72,7 +127,7 @@ int main(void) {
     TexturedModel texturedModel = TexturedModel(&model, &texture);
 
     Entity entity = Entity(&texturedModel,
-                           glm::vec3(0, 0, -1),  // Translate
+                           glm::vec3(0, 0, -5),  // Translate
                            0, 0, 0,              // Rotation
                            1);                   // Scale
 
@@ -82,6 +137,8 @@ int main(void) {
     while (glfwWindowShouldClose(gWindow) == false) {
         if (glfwGetKey(gWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(gWindow, true);
+
+        entity.increaseRotation(0, 0.1f, 0);
 
         camera.move();
 
